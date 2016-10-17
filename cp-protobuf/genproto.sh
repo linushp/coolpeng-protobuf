@@ -9,3 +9,11 @@ fi
 /usr/local/Cellar/protobuf/3.1.0/bin/protoc --java_out=src/main/java/  --proto_path=./ $1
 echo "ok"
 
+
+
+
+
+
+
+#https://github.com/grpc/grpc-java
+#https://github.com/google/protobuf
