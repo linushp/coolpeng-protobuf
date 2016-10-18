@@ -1,11 +1,12 @@
 
 package io.grpc.examples.helloworld;
 
+import com.google.common.util.concurrent.ListenableFuture;
 import io.grpc.ManagedChannel;
 import io.grpc.ManagedChannelBuilder;
 import io.grpc.StatusRuntimeException;
 
-import java.util.concurrent.TimeUnit;
+import java.util.concurrent.*;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 
@@ -15,8 +16,12 @@ import java.util.logging.Logger;
 public class HelloWorldClient {
     private static final Logger logger = Logger.getLogger(HelloWorldClient.class.getName());
 
+    private final ExecutorService cachedThreadPool = Executors.newSingleThreadExecutor();
+
     private final ManagedChannel channel;
     private final GreeterGrpc.GreeterBlockingStub blockingStub;
+    private final GreeterGrpc.GreeterFutureStub futureStub;
+
 
     /** Construct client connecting to HelloWorld server at {@code host:port}. */
     public HelloWorldClient(String host, int port) {
@@ -26,10 +31,39 @@ public class HelloWorldClient {
                 .usePlaintext(true)
                 .build();
         blockingStub = GreeterGrpc.newBlockingStub(channel);
+        futureStub = GreeterGrpc.newFutureStub(channel);
     }
 
     public void shutdown() throws InterruptedException {
         channel.shutdown().awaitTermination(5, TimeUnit.SECONDS);
+    }
+
+
+    public void greetAsyn(String name){
+        logger.info("Will try to greet " + name + " ...");
+        HelloRequest request = HelloRequest.newBuilder().setName(name).build();
+        final ListenableFuture<HelloReply> response = futureStub.sayHello(request);
+        response.addListener(new Runnable() {
+            @Override
+            public void run() {
+
+                try {
+
+                    logger.info("isDone :" + response.isDone());
+
+                    HelloReply x = response.get();
+
+                    logger.info(x.getMessage());
+
+                } catch (InterruptedException e) {
+                    e.printStackTrace();
+                } catch (ExecutionException e) {
+                    e.printStackTrace();
+                }
+
+            }
+        },cachedThreadPool);
+
     }
 
     /** Say hello to server. */
@@ -59,6 +93,7 @@ public class HelloWorldClient {
                 user = args[0]; /* Use the arg as the name to greet if provided */
             }
             client.greet(user);
+            client.greetAsyn("Shabi");
         } finally {
             client.shutdown();
         }
