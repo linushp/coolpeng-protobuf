@@ -3,3 +3,7 @@
 .DS_Store
 com.coolpeng.iml
 cp-protobuf/cp-protobuf.iml
+cp-register/cp-protobuf.iml
+cp-register-api/cp-protobuf.iml
+cp-register-api/target
+cp-register/target/

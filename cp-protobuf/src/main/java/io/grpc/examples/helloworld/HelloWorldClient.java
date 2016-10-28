@@ -16,7 +16,7 @@ import java.util.logging.Logger;
 public class HelloWorldClient {
     private static final Logger logger = Logger.getLogger(HelloWorldClient.class.getName());
 
-    private final ExecutorService cachedThreadPool = Executors.newSingleThreadExecutor();
+    private final ExecutorService cachedThreadPool = Executors.newFixedThreadPool(10);
 
     private final ManagedChannel channel;
     private final GreeterGrpc.GreeterBlockingStub blockingStub;
@@ -25,6 +25,9 @@ public class HelloWorldClient {
 
     /** Construct client connecting to HelloWorld server at {@code host:port}. */
     public HelloWorldClient(String host, int port) {
+
+//        GRPCServerCenter.getService("helloworld");
+
         channel = ManagedChannelBuilder.forAddress(host, port)
                 // Channels are secure by default (via SSL/TLS). For the example we disable TLS to avoid
                 // needing certificates.
@@ -40,11 +43,10 @@ public class HelloWorldClient {
 
 
     public void greetAsyn(String name){
-        logger.info("Will try to greet " + name + " ...");
+//        logger.info("Will try to greet " + name + " ...");
         HelloRequest request = HelloRequest.newBuilder().setName(name).build();
         final ListenableFuture<HelloReply> response = futureStub.sayHello(request);
         response.addListener(new Runnable() {
-            @Override
             public void run() {
 
                 try {
@@ -68,7 +70,7 @@ public class HelloWorldClient {
 
     /** Say hello to server. */
     public void greet(String name) {
-        logger.info("Will try to greet " + name + " ...");
+//        logger.info("Will try to greet " + name + " ...");
         HelloRequest request = HelloRequest.newBuilder().setName(name).build();
         HelloReply response;
         try {
@@ -86,16 +88,25 @@ public class HelloWorldClient {
      */
     public static void main(String[] args) throws Exception {
         HelloWorldClient client = new HelloWorldClient("localhost", 50051);
+
+
         try {
+            while (true) {
       /* Access a service running on the local machine on port 50051 */
-            String user = "world";
-            if (args.length > 0) {
-                user = args[0]; /* Use the arg as the name to greet if provided */
+                String user = "world";
+                if (args.length > 0) {
+                    user = args[0]; /* Use the arg as the name to greet if provided */
+                }
+                client.greet(user);
+                client.greetAsyn("Shabi");
+                Thread.sleep(1000);
             }
-            client.greet(user);
-            client.greetAsyn("Shabi");
+
         } finally {
             client.shutdown();
         }
+
+
+
     }
 }

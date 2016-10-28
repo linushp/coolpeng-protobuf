@@ -1,0 +1,25 @@
+
+syntax = "proto3";
+
+option java_multiple_files = true;
+option java_package = "com.coolpeng.grpcapiproto.pingpong";
+option java_outer_classname = "pingpong";
+option objc_class_prefix = "HLW";
+option java_generic_services = true;
+
+package ServicePingPong;
+
+service ServicePingPongCheck {
+    rpc ping (ServicePingRequest) returns (ServicePongResponse) {}
+}
+
+
+
+message ServicePingRequest {
+    string message = 1;
+}
+
+
+message ServicePongResponse {
+    string message = 1;
+}

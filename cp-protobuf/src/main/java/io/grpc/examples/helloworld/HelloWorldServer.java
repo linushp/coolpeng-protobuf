@@ -6,6 +6,7 @@ import io.grpc.ServerBuilder;
 import io.grpc.stub.StreamObserver;
 
 import java.io.IOException;
+import java.rmi.registry.Registry;
 import java.util.logging.Logger;
 
 /**
@@ -31,9 +32,15 @@ public class HelloWorldServer {
                 System.err.println("*** shutting down gRPC server since JVM is shutting down");
                 HelloWorldServer.this.stop();
                 System.err.println("*** server shut down");
+
+//                GRPCServiceCenter.unRegisterService("helloworld", "127.0.0.1", port);
             }
         });
+
+//        GRPCServerCenter.registerService("helloworld","127.0.0.1",port);
+
     }
+
 
     private void stop() {
         if (server != null) {
@@ -66,6 +73,7 @@ public class HelloWorldServer {
             HelloReply reply = HelloReply.newBuilder().setMessage("Hello " + req.getName()).build();
             responseObserver.onNext(reply);
             responseObserver.onCompleted();
+            System.out.println(req.getName());
         }
     }
 }
