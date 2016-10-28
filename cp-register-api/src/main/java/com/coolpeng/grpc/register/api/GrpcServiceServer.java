@@ -1,5 +1,6 @@
 package com.coolpeng.grpc.register.api;
 
+import com.coolpeng.grpc.register.api.innerimpl.GrpcRegisterCenterClientUtilsImpl;
 import com.coolpeng.grpc.register.api.innerimpl.GrpcRegisterCenterServiceImpl;
 import io.grpc.BindableService;
 import io.grpc.Server;
@@ -19,18 +20,19 @@ public class GrpcServiceServer {
 
     private static final Logger logger = Logger.getLogger(GrpcServiceServer.class.getName());
 
-
     private String ipAddress = "";
     private int port = 0;
     private Server server;
+    private String serverName;
     private List<BindableService> bindableServiceList = new ArrayList<BindableService>();
+    private GrpcRegisterCenterClientUtilsImpl grpcRegisterCenterClientUtils;
 
-
-    public GrpcServiceServer(int port) throws UnknownHostException {
+    public GrpcServiceServer(int port,String serverName) throws UnknownHostException {
         this.ipAddress = InetAddress.getLocalHost().getHostAddress();
         this.port = port;
+        this.serverName = serverName;
+        this.grpcRegisterCenterClientUtils = new GrpcRegisterCenterClientUtilsImpl();
     }
-
 
     public void start() throws IOException {
 
@@ -45,14 +47,16 @@ public class GrpcServiceServer {
         Runtime.getRuntime().addShutdownHook(new Thread() {
             @Override
             public void run() {
+
+                GrpcServiceServer.this.grpcRegisterCenterClientUtils.unRegisterServer(GrpcServiceServer.this);
+
                 System.err.println("*** shutting down gRPC server since JVM is shutting down");
                 GrpcServiceServer.this.stop();
                 System.err.println("*** server shut down");
             }
         });
 
-
-
+        this.grpcRegisterCenterClientUtils.registerServer(this);
     }
 
 
@@ -82,4 +86,27 @@ public class GrpcServiceServer {
         }
     }
 
+    public String getIpAddress() {
+        return ipAddress;
+    }
+
+    public void setIpAddress(String ipAddress) {
+        this.ipAddress = ipAddress;
+    }
+
+    public int getPort() {
+        return port;
+    }
+
+    public void setPort(int port) {
+        this.port = port;
+    }
+
+    public String getServerName() {
+        return serverName;
+    }
+
+    public void setServerName(String serverName) {
+        this.serverName = serverName;
+    }
 }

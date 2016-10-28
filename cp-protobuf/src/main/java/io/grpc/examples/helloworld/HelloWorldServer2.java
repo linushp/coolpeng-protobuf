@@ -17,7 +17,7 @@ public class HelloWorldServer2 {
      * Main launches the server from the command line.
      */
     public static void main(String[] args) throws IOException, InterruptedException {
-        GrpcServiceServer server = new GrpcServiceServer(10221);
+        GrpcServiceServer server = new GrpcServiceServer(10221,"helloworld");
         server.addService(new GreeterImpl());
         server.start();
         server.blockUntilShutdown();

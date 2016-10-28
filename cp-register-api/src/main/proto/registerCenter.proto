@@ -17,8 +17,8 @@ service GrpcRegisterCenter {
 
 message RegisterServiceRequest {
   string ip = 1;
-  string port = 2;
-  string serviceName = 3;
+  int32 port = 2;
+  string serverName = 3;
 }
 
 // The response message containing the greetings
