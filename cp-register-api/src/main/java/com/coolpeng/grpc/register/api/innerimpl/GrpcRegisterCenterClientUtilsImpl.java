@@ -1,8 +1,9 @@
 package com.coolpeng.grpc.register.api.innerimpl;
 
 import com.coolpeng.grpc.register.api.GrpcServiceServer;
+import com.coolpeng.grpc.register.api.config.GrpcRegisterConfig;
 import com.coolpeng.grpcapiproto.registercenter.GrpcRegisterCenterGrpc;
-import com.coolpeng.grpcapiproto.registercenter.RegisterServiceRequest;
+import com.coolpeng.grpcapiproto.registercenter.GrpcServicePB;
 import io.grpc.ManagedChannel;
 import io.grpc.ManagedChannelBuilder;
 
@@ -11,10 +12,6 @@ import io.grpc.ManagedChannelBuilder;
  */
 public class GrpcRegisterCenterClientUtilsImpl {
 
-    private static final String REGISTER_CENTER_IP_ADDR = "127.0.0.1";
-    private static final int REGISTER_CENTER_PORT = 10001;
-
-
 
     private final ManagedChannel channel;
     private final GrpcRegisterCenterGrpc.GrpcRegisterCenterBlockingStub blockingStub;
@@ -22,26 +19,35 @@ public class GrpcRegisterCenterClientUtilsImpl {
 
     public GrpcRegisterCenterClientUtilsImpl(){
 
-        channel = ManagedChannelBuilder.forAddress(REGISTER_CENTER_IP_ADDR, REGISTER_CENTER_PORT)
+        channel = ManagedChannelBuilder.forAddress(GrpcRegisterConfig.REGISTER_CENTER_IP_ADDR, GrpcRegisterConfig.REGISTER_CENTER_PORT)
                 .usePlaintext(true)
                 .build();
         blockingStub = GrpcRegisterCenterGrpc.newBlockingStub(channel);
     }
 
-    public void unRegisterServer(GrpcServiceServer grpcServiceServer) {
 
-        RegisterServiceRequest.Builder requestBuilder = RegisterServiceRequest.newBuilder();
+    public void unRegisterServer(GrpcServiceServer grpcServiceServer) {
+        GrpcServicePB.Builder requestBuilder = GrpcServicePB.newBuilder();
 
         requestBuilder.setIp(grpcServiceServer.getIpAddress());
         requestBuilder.setPort(grpcServiceServer.getPort());
-        requestBuilder.setServerName(grpcServiceServer.getServerName());
+        requestBuilder.setServiceName(grpcServiceServer.getServerName());
 
-        RegisterServiceRequest request = requestBuilder.build();
-        blockingStub.registerService(request);
+        GrpcServicePB request = requestBuilder.build();
+        blockingStub.unRegisterService(request);
 
     }
 
+
     public void registerServer(GrpcServiceServer grpcServiceServer) {
 
+        GrpcServicePB.Builder requestBuilder = GrpcServicePB.newBuilder();
+
+        requestBuilder.setIp(grpcServiceServer.getIpAddress());
+        requestBuilder.setPort(grpcServiceServer.getPort());
+        requestBuilder.setServiceName(grpcServiceServer.getServerName());
+
+        GrpcServicePB request = requestBuilder.build();
+        blockingStub.registerService(request);
     }
 }

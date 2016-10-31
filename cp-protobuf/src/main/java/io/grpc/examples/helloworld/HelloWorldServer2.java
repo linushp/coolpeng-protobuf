@@ -32,5 +32,6 @@ public class HelloWorldServer2 {
             responseObserver.onCompleted();
             System.out.println(req.getName());
         }
+
     }
 }

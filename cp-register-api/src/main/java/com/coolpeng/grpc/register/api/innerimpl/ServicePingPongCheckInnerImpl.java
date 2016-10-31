@@ -4,7 +4,7 @@ package com.coolpeng.grpc.register.api.innerimpl;
 import com.coolpeng.grpcapiproto.pingpong.*;
 
 
-public class GrpcRegisterCenterServiceImpl extends ServicePingPongCheckGrpc.ServicePingPongCheckImplBase{
+public class ServicePingPongCheckInnerImpl extends ServicePingPongCheckGrpc.ServicePingPongCheckImplBase{
 
     @Override
     public void ping(com.coolpeng.grpcapiproto.pingpong.ServicePingRequest req,

@@ -10,18 +10,29 @@ option java_generic_services = true;
 package GrpcRegisterCenter;
 
 service GrpcRegisterCenter {
-  rpc registerService (RegisterServiceRequest) returns (RegisterServiceReply) {}
+  rpc registerService (GrpcServicePB) returns (RegisterServiceReply) {}
+  rpc unRegisterService (GrpcServicePB) returns (RegisterServiceReply) {}
+  rpc getService (GetServiceRequest) returns (GetServiceResponse) {}
 }
 
 
 
-message RegisterServiceRequest {
+message GrpcServicePB {
   string ip = 1;
   int32 port = 2;
-  string serverName = 3;
+  string serviceName = 3;
 }
 
-// The response message containing the greetings
 message RegisterServiceReply {
   string message = 1;
 }
+
+
+message GetServiceRequest {
+  string serviceName = 1;
+}
+
+message GetServiceResponse {
+  repeated GrpcServicePB services = 1;
+}
+

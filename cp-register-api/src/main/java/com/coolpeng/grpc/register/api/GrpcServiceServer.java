@@ -1,7 +1,7 @@
 package com.coolpeng.grpc.register.api;
 
 import com.coolpeng.grpc.register.api.innerimpl.GrpcRegisterCenterClientUtilsImpl;
-import com.coolpeng.grpc.register.api.innerimpl.GrpcRegisterCenterServiceImpl;
+import com.coolpeng.grpc.register.api.innerimpl.ServicePingPongCheckInnerImpl;
 import io.grpc.BindableService;
 import io.grpc.Server;
 import io.grpc.ServerBuilder;
@@ -38,7 +38,7 @@ public class GrpcServiceServer {
 
         ServerBuilder<?> serverBuilder = ServerBuilder.forPort(port);
 
-        serverBuilder.addService(new GrpcRegisterCenterServiceImpl());
+        serverBuilder.addService(new ServicePingPongCheckInnerImpl());
 
         addServiceToBuilder(serverBuilder);
         server = serverBuilder.build().start();
