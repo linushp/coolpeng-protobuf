@@ -15,11 +15,12 @@ public class GrpcServiceClient {
     private List<ManagedChannel> managedChannelList;
 
     public GrpcServiceClient(String serviceName){
-
+        //TODO
     }
 
     public ManagedChannel getManagedChannel() {
-
+        //TODO
+        return null;
     }
 
     public void init(){
@@ -28,6 +29,7 @@ public class GrpcServiceClient {
         }
 
 
+        //TODO
 
     }
 
