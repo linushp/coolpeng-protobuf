@@ -1,4 +1,4 @@
-package com.coolpeng.grpc.register.api.innerimpl;
+package com.coolpeng.grpc.register.api.innerimpl.forserver;
 
 import com.coolpeng.grpc.register.api.GrpcServiceServer;
 import com.coolpeng.grpc.register.api.config.GrpcRegisterConfig;
@@ -8,18 +8,18 @@ import io.grpc.ManagedChannel;
 import io.grpc.ManagedChannelBuilder;
 
 /**
- * Created by luanhaipeng on 16/10/28.
+ *  服务启动时，服务Provider向注册中心注册服务。
  */
-public class GrpcRegisterCenterClientUtilsImpl {
+public class PutServiceToRegisterCenterInnerImpl {
 
 
     private final ManagedChannel channel;
     private final GrpcRegisterCenterGrpc.GrpcRegisterCenterBlockingStub blockingStub;
 
 
-    public GrpcRegisterCenterClientUtilsImpl(){
+    public PutServiceToRegisterCenterInnerImpl(String registerCenterHost, int registerCenterPort){
 
-        channel = ManagedChannelBuilder.forAddress(GrpcRegisterConfig.REGISTER_CENTER_IP_ADDR, GrpcRegisterConfig.REGISTER_CENTER_PORT)
+        channel = ManagedChannelBuilder.forAddress(registerCenterHost, registerCenterPort)
                 .usePlaintext(true)
                 .build();
         blockingStub = GrpcRegisterCenterGrpc.newBlockingStub(channel);
@@ -31,7 +31,7 @@ public class GrpcRegisterCenterClientUtilsImpl {
 
         requestBuilder.setIp(grpcServiceServer.getIpAddress());
         requestBuilder.setPort(grpcServiceServer.getPort());
-        requestBuilder.setServiceName(grpcServiceServer.getServerName());
+        requestBuilder.setServiceName(grpcServiceServer.getServiceName());
 
         GrpcServicePB request = requestBuilder.build();
         blockingStub.unRegisterService(request);
@@ -45,7 +45,7 @@ public class GrpcRegisterCenterClientUtilsImpl {
 
         requestBuilder.setIp(grpcServiceServer.getIpAddress());
         requestBuilder.setPort(grpcServiceServer.getPort());
-        requestBuilder.setServiceName(grpcServiceServer.getServerName());
+        requestBuilder.setServiceName(grpcServiceServer.getServiceName());
 
         GrpcServicePB request = requestBuilder.build();
         blockingStub.registerService(request);

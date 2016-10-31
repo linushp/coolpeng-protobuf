@@ -74,6 +74,7 @@ public class GrpcRegisterCenterServiceImpl extends GrpcRegisterCenterGrpc.GrpcRe
                 pbBuilder.setPort(model.getPort());
 
                 GrpcServicePB pb = pbBuilder.build();
+
                 responseBuilder.addServices(pb);
 
             }

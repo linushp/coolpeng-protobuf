@@ -1,7 +1,8 @@
 package com.coolpeng.grpc.register.api;
 
-import com.coolpeng.grpc.register.api.innerimpl.GrpcRegisterCenterClientUtilsImpl;
-import com.coolpeng.grpc.register.api.innerimpl.ServicePingPongCheckInnerImpl;
+import com.coolpeng.grpc.register.api.config.GrpcRegisterConfig;
+import com.coolpeng.grpc.register.api.innerimpl.forserver.PutServiceToRegisterCenterInnerImpl;
+import com.coolpeng.grpc.register.api.innerimpl.forserver.ServicePingPongCheckInnerImpl;
 import io.grpc.BindableService;
 import io.grpc.Server;
 import io.grpc.ServerBuilder;
@@ -23,18 +24,22 @@ public class GrpcServiceServer {
     private String ipAddress = "";
     private int port = 0;
     private Server server;
-    private String serverName;
+    private String serviceName;
     private List<BindableService> bindableServiceList = new ArrayList<BindableService>();
-    private GrpcRegisterCenterClientUtilsImpl grpcRegisterCenterClientUtils;
+    private PutServiceToRegisterCenterInnerImpl grpcRegisterCenterClientUtils;
 
-    public GrpcServiceServer(int port,String serverName) throws UnknownHostException {
+    private String registerCenterHost = GrpcRegisterConfig.REGISTER_CENTER_IP_ADDR; //注册中心IP地址
+    private int registerCenterPort = GrpcRegisterConfig.REGISTER_CENTER_PORT;//注册中心端口
+
+    public GrpcServiceServer(int port,String serviceName) throws UnknownHostException {
         this.ipAddress = InetAddress.getLocalHost().getHostAddress();
         this.port = port;
-        this.serverName = serverName;
-        this.grpcRegisterCenterClientUtils = new GrpcRegisterCenterClientUtilsImpl();
+        this.serviceName = serviceName;
     }
 
     public void start() throws IOException {
+
+        this.grpcRegisterCenterClientUtils = new PutServiceToRegisterCenterInnerImpl(this.registerCenterHost,this.registerCenterPort);
 
         ServerBuilder<?> serverBuilder = ServerBuilder.forPort(port);
 
@@ -102,11 +107,17 @@ public class GrpcServiceServer {
         this.port = port;
     }
 
-    public String getServerName() {
-        return serverName;
+    public String getServiceName() {
+        return serviceName;
     }
 
-    public void setServerName(String serverName) {
-        this.serverName = serverName;
+    public void setServiceName(String serviceName) {
+        this.serviceName = serviceName;
     }
+
+    public void setRegisterCenterHostAndPort(String registerCenterHost,int registerCenterPort) {
+        this.registerCenterHost = registerCenterHost;
+        this.registerCenterPort = registerCenterPort;
+    }
+
 }

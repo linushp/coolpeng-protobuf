@@ -1,7 +1,6 @@
 package com.coolpeng.grpc.register.service;
 
 import com.coolpeng.grpc.register.api.config.GrpcRegisterConfig;
-import com.coolpeng.grpc.register.api.innerimpl.ServicePingPongCheckInnerImpl;
 import com.coolpeng.grpc.register.service.impl.GrpcRegisterCenterServiceImpl;
 import com.coolpeng.grpc.register.service.servicemonitor.ServiceMonitor;
 import io.grpc.Server;

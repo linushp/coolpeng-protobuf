@@ -7,9 +7,11 @@ import com.coolpeng.grpc.register.api.GrpcServiceClient;
  */
 public class HelloworldClient2 extends GrpcServiceClient{
 
-    public HelloworldClient2() {
-        super("helloworld");
+    private static HelloworldClient2 instance = new HelloworldClient2();
+    public static HelloworldClient2 getInstance(){
+        return instance;
     }
+
 
     public GreeterGrpc.GreeterBlockingStub getGreeterBlockingStub(){
         return GreeterGrpc.newBlockingStub(super.getManagedChannel());

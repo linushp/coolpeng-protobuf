@@ -19,6 +19,7 @@ public class ServiceMonitorThread implements Runnable {
 
         while (true) {
 
+            //1分钟
             threadSleep(1);
 
 

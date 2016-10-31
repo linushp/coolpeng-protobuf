@@ -1,4 +1,4 @@
-package com.coolpeng.grpc.register.api.innerimpl;
+package com.coolpeng.grpc.register.api.innerimpl.forserver;
 
 
 import com.coolpeng.grpcapiproto.pingpong.*;
