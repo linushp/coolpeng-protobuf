@@ -5,9 +5,7 @@ import io.grpc.ManagedChannel;
 
 import java.util.List;
 
-/**
- * Created by luanhaipeng on 16/10/31.
- */
+
 public class GrpcServiceClient {
 
 
