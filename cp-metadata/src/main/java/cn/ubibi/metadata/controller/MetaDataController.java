@@ -3,10 +3,8 @@ package cn.ubibi.metadata.controller;
 import cn.ubibi.metadata.models.MetaDataEntity;
 import cn.ubibi.metadata.initdata.InitMetaData;
 import cn.ubibi.metadata.repository.MetaDataRepository;
-import com.mongodb.BasicDBObject;
-import com.mongodb.DB;
-import com.mongodb.DBCollection;
-import com.mongodb.DBObject;
+import com.mongodb.*;
+import com.mongodb.util.JSON;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.mongodb.core.MongoTemplate;
 import org.springframework.web.bind.annotation.RequestMapping;
@@ -42,8 +40,9 @@ public class MetaDataController {
 
         DBObject query = new BasicDBObject();
 
-        xx.find(query);
+        DBCursor dsf = xx.find(query);
 
+        String ddds = JSON.serialize(dsf);
 
         initMetaData.doinsert();
         return metaDataRepository.findAll();
