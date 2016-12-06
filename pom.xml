@@ -14,5 +14,8 @@
         <module>cp-protobuf</module>
         <module>cp-register</module>
         <module>cp-register-api</module>
+        <module>com.coolpeng.framework.grpc</module>
+        <module>com.coolpeng.framework.grpcserver</module>
+        <module>cp-metadata</module>
     </modules>
 </project>

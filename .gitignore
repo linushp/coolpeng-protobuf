@@ -5,5 +5,11 @@ com.coolpeng.iml
 cp-protobuf/cp-protobuf.iml
 cp-register/cp-protobuf.iml
 cp-register-api/cp-protobuf.iml
-cp-register-api/target
+cp-register-api/target/
 cp-register/target/
+
+com.coolpeng.framework.grpcserver/com.coolpeng.framework.grpcserver.iml
+com.coolpeng.framework.grpcserver/target/
+com.coolpeng.framework.grpc/com.coolpeng.framework.grpc.iml
+com.coolpeng.framework.grpc/target/
+*.iml
