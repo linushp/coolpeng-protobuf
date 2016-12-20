@@ -7,6 +7,9 @@ import io.netty.channel.EventLoopGroup;
 import io.netty.channel.nio.NioEventLoopGroup;
 import io.netty.channel.socket.SocketChannel;
 import io.netty.channel.socket.nio.NioServerSocketChannel;
+import io.netty.handler.codec.string.StringDecoder;
+import io.netty.handler.codec.string.StringEncoder;
+
 import java.net.InetSocketAddress;
 
 public class EchoServer {
@@ -17,24 +20,24 @@ public class EchoServer {
 		EventLoopGroup group = new NioEventLoopGroup();// 通过nio方式来接收连接和处理连接
 		try {
 
+
 			bootstrap.group(group);
 			bootstrap.channel(NioServerSocketChannel.class);// 设置nio类型的channel
 			bootstrap.localAddress(new InetSocketAddress(port));// 设置监听端口
 			bootstrap.childHandler(new ChannelInitializer<SocketChannel>() {//有连接到达时会创建一个channel
 				protected void initChannel(SocketChannel ch) throws Exception {
+
+					ch.pipeline().addLast("decoder", new StringDecoder());
 					// pipeline管理channel中的Handler，在channel队列中添加一个handler来处理业务
 					ch.pipeline().addLast("myHandler", new EchoServerHandler());
+					ch.pipeline().addLast("StringEncoder", new StringEncoder());
+					System.out.println("initChannel"+ ch.remoteAddress());
 				}
 			});
 
 
 			ChannelFuture f = bootstrap.bind().sync();// 配置完成，开始绑定server，通过调用sync同步方法阻塞直到绑定成功
 			System.out.println(EchoServer.class.getName() + " started and listen on " + f.channel().localAddress());
-
-//
-//            f.addListener((a)->{
-//
-//            });
 
 
 			f.channel().closeFuture().sync();// 应用程序会一直等待，直到channel关闭

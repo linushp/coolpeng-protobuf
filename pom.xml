@@ -17,5 +17,6 @@
         <module>com.coolpeng.framework.grpc</module>
         <module>com.coolpeng.framework.grpcserver</module>
         <module>cp-metadata</module>
+        <module>cp-netty-demo</module>
     </modules>
 </project>
